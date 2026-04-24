@@ -1,0 +1,1272 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  .app { max-width: 100%; }
+
+  .hero { padding: 2rem 1.5rem 1rem; text-align: center; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .hero h1 { font-size: 22px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 6px; }
+  .hero p { font-size: 13px; color: var(--color-text-secondary); }
+
+  .nav { display: flex; flex-wrap: wrap; gap: 8px; padding: 1rem 1.5rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .nav-btn { font-size: 12px; padding: 6px 12px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-secondary); cursor: pointer; transition: all 0.15s; font-family: var(--font-sans); }
+  .nav-btn:hover { background: var(--color-background-secondary); }
+  .nav-btn.active { background: #EEEDFE; border-color: #AFA9EC; color: #3C3489; font-weight: 500; }
+
+  .section-nav { display: flex; flex-wrap: wrap; gap: 6px; padding: 0.75rem 1.5rem; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .sec-btn { font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-primary); color: var(--color-text-secondary); cursor: pointer; font-family: var(--font-sans); transition: all 0.15s; }
+  .sec-btn:hover { background: var(--color-background-primary); border-color: var(--color-border-secondary); }
+  .sec-btn.active { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+
+  .content { padding: 1.5rem; }
+
+  .section { display: none; }
+  .section.visible { display: block; }
+
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
+  .card h2 { font-size: 16px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .card h3 { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin: 1rem 0 0.5rem; }
+  .card p { font-size: 13px; color: var(--color-text-secondary); line-height: 1.7; margin-bottom: 0.5rem; }
+  .card ul { padding-left: 1.25rem; margin-bottom: 0.5rem; }
+  .card ul li { font-size: 13px; color: var(--color-text-secondary); line-height: 1.7; }
+  .card ol { padding-left: 1.25rem; }
+  .card ol li { font-size: 13px; color: var(--color-text-secondary); line-height: 1.7; margin-bottom: 4px; }
+
+  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px; margin: 2px; font-weight: 500; }
+  .badge-purple { background: #EEEDFE; color: #3C3489; }
+  .badge-teal { background: #E1F5EE; color: #085041; }
+  .badge-amber { background: #FAEEDA; color: #633806; }
+  .badge-coral { background: #FAECE7; color: #712B13; }
+  .badge-red { background: #FCEBEB; color: #791F1F; }
+
+  .tip-box { background: #E1F5EE; border-left: 3px solid #1D9E75; border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 0.75rem 1rem; margin: 0.75rem 0; }
+  .tip-box p { color: #085041; margin: 0; }
+
+  .warn-box { background: #FAEEDA; border-left: 3px solid #EF9F27; border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; padding: 0.75rem 1rem; margin: 0.75rem 0; }
+  .warn-box p { color: #633806; margin: 0; }
+
+  .step { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 0.75rem; }
+  .step-num { min-width: 24px; height: 24px; border-radius: 50%; background: #EEEDFE; color: #3C3489; font-size: 12px; font-weight: 500; display: flex; align-items: center; justify-content: center; }
+  .step-content { font-size: 13px; color: var(--color-text-secondary); line-height: 1.7; flex: 1; }
+
+  table.tt { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 13px; }
+  table.tt th { background: #EEEDFE; color: #3C3489; font-weight: 500; padding: 6px 10px; text-align: center; border: 0.5px solid #AFA9EC; }
+  table.tt td { padding: 6px 10px; text-align: center; border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); }
+  table.tt tr:nth-child(even) td { background: var(--color-background-secondary); }
+
+  .mcq-item { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.75rem; margin-bottom: 0.75rem; border: 0.5px solid var(--color-border-tertiary); }
+  .mcq-item p.q { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 0.5rem; }
+  .mcq-opt { font-size: 12px; color: var(--color-text-secondary); padding: 3px 0; }
+  .mcq-ans { display: none; margin-top: 0.5rem; padding: 0.5rem; background: #E1F5EE; border-radius: var(--border-radius-md); font-size: 12px; color: #085041; }
+  .show-ans-btn { font-size: 11px; padding: 3px 10px; border-radius: 20px; border: 0.5px solid #5DCAA5; background: transparent; color: #085041; cursor: pointer; margin-top: 0.5rem; font-family: var(--font-sans); }
+
+  .mono { font-family: var(--font-mono); background: var(--color-background-secondary); padding: 0.75rem; border-radius: var(--border-radius-md); font-size: 12px; color: var(--color-text-primary); line-height: 1.8; white-space: pre; overflow-x: auto; margin: 0.5rem 0; }
+
+  .mindmap { font-family: var(--font-mono); font-size: 12px; color: var(--color-text-secondary); line-height: 2; background: var(--color-background-secondary); padding: 1rem; border-radius: var(--border-radius-md); }
+  .mindmap .root { font-weight: 500; color: var(--color-text-primary); font-size: 13px; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 580px) { .grid2 { grid-template-columns: 1fr; } }
+
+  .metric { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem; text-align: center; }
+  .metric .num { font-size: 24px; font-weight: 500; color: var(--color-text-primary); }
+  .metric .lbl { font-size: 12px; color: var(--color-text-secondary); margin-top: 4px; }
+
+  .exam-tip { display: flex; gap: 10px; align-items: flex-start; padding: 0.5rem 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .exam-tip:last-child { border-bottom: none; }
+  .tip-icon { font-size: 16px; min-width: 20px; }
+  .tip-text { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
+
+  .progress-bar { display: flex; gap: 4px; padding: 0.75rem 1.5rem; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-tertiary); align-items: center; }
+  .pb-item { flex: 1; height: 4px; border-radius: 2px; background: var(--color-border-tertiary); transition: background 0.3s; }
+  .pb-item.done { background: #1D9E75; }
+  .pb-label { font-size: 11px; color: var(--color-text-secondary); min-width: 80px; text-align: right; }
+
+  .ask-claude-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; padding: 6px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: var(--color-background-secondary); color: var(--color-text-secondary); cursor: pointer; font-family: var(--font-sans); margin-top: 0.75rem; }
+  .ask-claude-btn:hover { background: #EEEDFE; border-color: #AFA9EC; color: #3C3489; }
+
+  .scenario-box { border: 0.5px solid #AFA9EC; background: #EEEDFE; border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 1rem; }
+  .scenario-box .label { font-size: 11px; font-weight: 500; color: #534AB7; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
+  .scenario-box p { font-size: 13px; color: #26215C; line-height: 1.7; }
+  .scenario-ans { display: none; margin-top: 0.75rem; padding: 0.75rem; background: var(--color-background-primary); border-radius: var(--border-radius-md); }
+  .scenario-ans p { color: var(--color-text-secondary); }
+</style>
+
+<div class="app">
+<h2 class="sr-only">AICT Midterm Complete Study System — 6 topics with notes, diagrams, and practice questions</h2>
+
+<div class="hero">
+  <h1>AICT Midterm Study System</h1>
+  <p>Complete crash course · Notes · Diagrams · Practice questions · Exam strategy</p>
+</div>
+
+<div class="nav" id="topicNav">
+  <button class="nav-btn active" onclick="switchTopic(0)">Algorithms & Flowcharts</button>
+  <button class="nav-btn" onclick="switchTopic(1)">Number Systems</button>
+  <button class="nav-btn" onclick="switchTopic(2)">Network Topologies</button>
+  <button class="nav-btn" onclick="switchTopic(3)">SDLC</button>
+  <button class="nav-btn" onclick="switchTopic(4)">Logic Gates</button>
+  <button class="nav-btn" onclick="switchTopic(5)">Boolean & Circuits</button>
+</div>
+
+<div class="progress-bar" id="progressBar">
+  <div class="pb-item" id="pb0"></div>
+  <div class="pb-item" id="pb1"></div>
+  <div class="pb-item" id="pb2"></div>
+  <div class="pb-item" id="pb3"></div>
+  <div class="pb-item" id="pb4"></div>
+  <div class="pb-item" id="pb5"></div>
+  <div class="pb-label" id="pbLabel">0/6 studied</div>
+</div>
+
+<div class="section-nav" id="sectionNav"></div>
+
+<div class="content" id="mainContent"></div>
+</div>
+
+<script>
+const visited = new Set();
+let currentTopic = 0;
+let currentSection = 0;
+
+const topics = [
+
+{
+  title: "Algorithms & Flowcharts",
+  color: "purple",
+  sections: ["Notes", "Mind Map", "Flowchart", "ELI10", "Problem Solving", "Practice MCQs", "Short Qs", "Exam Strategy"],
+  content: [
+    // 0: Notes
+    `<div class="card">
+      <h2>Complete Notes — Algorithms & Flowcharts</h2>
+      <p><span class="badge badge-purple">Definition</span> An <strong>algorithm</strong> is a finite, ordered set of well-defined instructions to solve a problem or accomplish a task. It must have: Input, Output, Definiteness, Finiteness, and Effectiveness.</p>
+      <h3>Properties of a Good Algorithm</h3>
+      <ul>
+        <li><strong>Input:</strong> Zero or more inputs accepted</li>
+        <li><strong>Output:</strong> At least one output produced</li>
+        <li><strong>Definiteness:</strong> Each step is clear and unambiguous</li>
+        <li><strong>Finiteness:</strong> Algorithm terminates after finite steps</li>
+        <li><strong>Effectiveness:</strong> Each step must be feasible</li>
+      </ul>
+      <h3>Flowchart Symbols</h3>
+      <table class="tt">
+        <tr><th>Symbol</th><th>Shape</th><th>Purpose</th></tr>
+        <tr><td>Terminal</td><td>Oval / Rounded rect</td><td>Start / End of program</td></tr>
+        <tr><td>Process</td><td>Rectangle</td><td>Calculation or operation</td></tr>
+        <tr><td>Decision</td><td>Diamond</td><td>Yes/No condition (if/else)</td></tr>
+        <tr><td>Input/Output</td><td>Parallelogram</td><td>Read input / Display output</td></tr>
+        <tr><td>Flow Arrow</td><td>Arrow</td><td>Direction of flow</td></tr>
+        <tr><td>Connector</td><td>Circle</td><td>Connect parts of large flowchart</td></tr>
+      </table>
+      <h3>Types of Control Structures</h3>
+      <ul>
+        <li><strong>Sequence:</strong> Steps executed one after another in order</li>
+        <li><strong>Selection:</strong> Decision-based branching (IF-THEN-ELSE)</li>
+        <li><strong>Iteration/Loop:</strong> Repeating steps (WHILE, FOR, DO-WHILE)</li>
+      </ul>
+      <div class="warn-box"><p><strong>Common Mistakes:</strong> Forgetting Start/End terminals · Missing arrows · Using wrong shapes · Infinite loops (no exit condition) · Off-by-one errors in loops</p></div>
+      <h3>Algorithm Characteristics vs Flowcharts</h3>
+      <p>Algorithm = written in pseudocode/English steps. Flowchart = visual/graphical representation of the same algorithm. Both are used in the <strong>design phase</strong> of programming.</p>
+      <h3>Real-Life Example</h3>
+      <p>Making tea: Start → Boil water → Add tea bag → Wait 3 min → Add milk/sugar → End. This is an algorithm. Drawing it with symbols = flowchart.</p>
+    </div>
+    <div class="card">
+      <h2>Important Exam Focus Areas</h2>
+      <span class="badge badge-red">Must Know</span><span class="badge badge-amber">Frequently Tested</span>
+      <ul style="margin-top:0.5rem">
+        <li>Identify the correct flowchart symbol for a given operation</li>
+        <li>Draw a flowchart for: finding max of 3 numbers, grade calculator, even/odd check</li>
+        <li>Convert pseudocode to flowchart</li>
+        <li>Trace through a given flowchart and find the output</li>
+        <li>Difference between algorithm and program</li>
+        <li>Identify which control structure is used in a flowchart</li>
+      </ul>
+    </div>`,
+
+    // 1: Mind Map
+    `<div class="card">
+      <h2>Mind Map — Algorithms & Flowcharts</h2>
+      <div class="mindmap">
+<span class="root">ALGORITHMS & FLOWCHARTS</span>
+├── ALGORITHM
+│   ├── Definition: Step-by-step instructions
+│   ├── Properties
+│   │   ├── Input (0 or more)
+│   │   ├── Output (≥1)
+│   │   ├── Definiteness (clear steps)
+│   │   ├── Finiteness (must end)
+│   │   └── Effectiveness (feasible)
+│   └── Representation
+│       ├── Pseudocode (English-like)
+│       └── Flowchart (visual)
+│
+├── FLOWCHART SYMBOLS
+│   ├── Oval → Start/End
+│   ├── Rectangle → Process
+│   ├── Diamond → Decision (Yes/No)
+│   ├── Parallelogram → Input/Output
+│   ├── Arrow → Flow direction
+│   └── Circle → Connector
+│
+├── CONTROL STRUCTURES
+│   ├── Sequence → Step 1 → Step 2 → Step 3
+│   ├── Selection → IF condition THEN A ELSE B
+│   └── Iteration → WHILE condition DO steps
+│
+└── APPLICATIONS
+    ├── Sorting (bubble, selection)
+    ├── Searching (linear, binary)
+    └── Everyday problem solving</div>
+    </div>`,
+
+    // 2: Flowchart diagram
+    `<div class="card">
+      <h2>Sample Flowcharts (Text Diagrams)</h2>
+      <h3>Example 1: Check if a number is Even or Odd</h3>
+      <div class="mono">        [START]
+           |
+     [Read Number N]
+           |
+     &lt;N % 2 == 0?&gt;
+      /         \
+    YES          NO
+     |            |
+ [Print "Even"]  [Print "Odd"]
+     |            |
+      \          /
+         [END]</div>
+      <h3>Example 2: Find Largest of 3 Numbers</h3>
+      <div class="mono">        [START]
+           |
+    [Read A, B, C]
+           |
+     &lt;A &gt; B?&gt;
+    /         \
+  YES          NO
+   |            |
+&lt;A &gt; C?&gt;    &lt;B &gt; C?&gt;
+  /   \       /   \
+YES   NO    YES   NO
+ |     |     |     |
+[A]   [C]   [B]   [C]  ← largest
+   \   |   /   /
+    [Print Max]
+         |
+       [END]</div>
+      <h3>Example 3: Loop — Print 1 to 5</h3>
+      <div class="mono">        [START]
+           |
+       [i = 1]
+           |
+      &lt;i &lt;= 5?&gt;
+      /         \
+    YES          NO → [END]
+     |
+  [Print i]
+     |
+  [i = i + 1]
+     |
+  (loop back)</div>
+      <div class="tip-box"><p><strong>Exam Tip:</strong> In a decision diamond, always label BOTH exits (YES/NO or TRUE/FALSE). Missing labels = marks deducted.</p></div>
+    </div>`,
+
+    // 3: ELI10
+    `<div class="card">
+      <h2>Explain Like I'm 10</h2>
+      <h3>What is an Algorithm?</h3>
+      <p>Imagine you want to make a sandwich. You don't just randomly grab things — you follow steps: Get bread, get cheese, put cheese between bread, done! That list of steps is an <strong>algorithm</strong>. A computer follows the same idea — a list of steps to solve a problem.</p>
+      <h3>What is a Flowchart?</h3>
+      <p>A flowchart is like a <strong>map of the algorithm</strong>. Instead of writing steps in words, you draw them using special shapes and arrows. It's like a treasure map — you follow the arrows and shapes until you reach the "End" treasure!</p>
+      <h3>Why the Diamond Shape for Decisions?</h3>
+      <p>A diamond has two pointy sides — just like a decision has TWO choices: YES or NO. When you see a diamond, the computer is asking a question and will go one of two ways depending on the answer.</p>
+      <h3>What's a Loop?</h3>
+      <p>Imagine your mom says "eat one spoon of food" 5 times. She repeats the same instruction until you finish. That repetition is a <strong>loop</strong>. In a flowchart, the arrow goes back to repeat the steps.</p>
+      <div class="tip-box"><p><strong>Memory trick:</strong> O-val = stOp/stArt. Diamond = Decision. Rect-angle = actiOn. Parallelogram = in/out-put.</p></div>
+    </div>`,
+
+    // 4: Problem Solving
+    `<div class="card">
+      <h2>Step-by-Step Problem Solving</h2>
+      <h3>How to Draw a Flowchart — 5-Step Method</h3>
+      <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Identify Inputs:</strong> What data does the problem need? (e.g., "two numbers")</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Identify Outputs:</strong> What should the result be? (e.g., "their sum")</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Identify Decisions:</strong> Are there any YES/NO conditions? (e.g., "is it negative?")</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Identify Loops:</strong> Is anything repeated? (e.g., "repeat 5 times")</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content"><strong>Draw:</strong> Start → Inputs → Process/Decisions/Loops → Output → End</div></div>
+      <h3>Worked Example: Grade Calculator</h3>
+      <p>Problem: Read a score. If ≥ 60, print "Pass", otherwise "Fail".</p>
+      <div class="mono">Step 1: Input = score (number)
+Step 2: Output = "Pass" or "Fail"
+Step 3: Decision = Is score ≥ 60?
+Step 4: No loop needed
+
+[START] → [Read score] → &lt;score ≥ 60?&gt;
+  YES → [Print "Pass"] → [END]
+  NO  → [Print "Fail"] → [END]</div>
+      <h3>Worked Example: Sum of N numbers</h3>
+      <div class="mono">Step 1: Input = N (how many), each number
+Step 2: Output = total sum
+Step 3: Loop = repeat N times
+
+[START] → [Sum=0, i=1] → [Read N]
+→ &lt;i ≤ N?&gt;
+   YES → [Read num] → [Sum = Sum + num] → [i = i+1] → (back)
+   NO  → [Print Sum] → [END]</div>
+    </div>`,
+
+    // 5: MCQs
+    `<div class="card">
+      <h2>Practice MCQs (with answers)</h2>
+      ${[
+        {q:"1. Which flowchart symbol represents a decision?", opts:["a) Rectangle","b) Oval","c) Diamond","d) Parallelogram"], ans:"c) Diamond — It has two exits: YES and NO (or TRUE/FALSE)."},
+        {q:"2. What does a parallelogram represent?", opts:["a) Process","b) Decision","c) Input/Output","d) Start/End"], ans:"c) Input/Output — e.g., Read a number OR Print result."},
+        {q:"3. Which property ensures an algorithm terminates?", opts:["a) Definiteness","b) Finiteness","c) Effectiveness","d) Input"], ans:"b) Finiteness — An algorithm must end after a finite number of steps."},
+        {q:"4. A loop in a flowchart is represented by?", opts:["a) A diamond with one exit","b) An arrow going backward","c) A rectangle alone","d) Two ovals"], ans:"b) An arrow going backward — The flow returns to an earlier step to repeat."},
+        {q:"5. Which control structure uses IF-THEN-ELSE?", opts:["a) Sequence","b) Iteration","c) Selection","d) Recursion"], ans:"c) Selection — Branches based on a condition being true or false."},
+        {q:"6. An algorithm differs from a program because:", opts:["a) Programs have symbols","b) Algorithms are language-independent","c) Programs have no logic","d) Algorithms need hardware"], ans:"b) Language-independent — Algorithms can be implemented in any language."},
+        {q:"7. Which is NOT a property of a good algorithm?", opts:["a) Output","b) Ambiguity","c) Finiteness","d) Effectiveness"], ans:"b) Ambiguity — A good algorithm must be DEFINITE (unambiguous), not ambiguous."},
+        {q:"8. The oval symbol in a flowchart represents:", opts:["a) Decision","b) Process","c) Terminal (Start/End)","d) Connector"], ans:"c) Terminal — Ovals mark the beginning and end of a flowchart."},
+        {q:"9. What is pseudocode?", opts:["a) A programming language","b) English-like description of steps","c) A type of flowchart","d) Machine code"], ans:"b) English-like steps — Pseudocode describes logic informally, not in a specific language."},
+        {q:"10. A flowchart with no decision diamond contains which structure only?", opts:["a) Iteration","b) Selection","c) Sequence","d) Recursion"], ans:"c) Sequence — Steps execute one after another with no branching."}
+      ].map(q => `<div class="mcq-item"><p class="q">${q.q}</p>${q.opts.map(o=>`<div class="mcq-opt">${o}</div>`).join('')}<button class="show-ans-btn" onclick="toggleAns(this)">Show Answer</button><div class="mcq-ans">${q.ans}</div></div>`).join('')}
+    </div>`,
+
+    // 6: Short Qs
+    `<div class="card">
+      <h2>Short Questions & Answers</h2>
+      ${[
+        {q:"Q1. Define an algorithm and list its 5 properties.", a:"An algorithm is a finite, ordered set of unambiguous instructions to solve a problem. Properties: Input, Output, Definiteness, Finiteness, Effectiveness."},
+        {q:"Q2. What is the difference between a flowchart and pseudocode?", a:"Flowchart = graphical/visual representation using symbols and arrows. Pseudocode = written description using English-like statements. Both represent the same algorithm."},
+        {q:"Q3. Name the 3 control structures used in algorithms.", a:"1. Sequence (steps in order), 2. Selection (IF-THEN-ELSE branching), 3. Iteration/Loop (repeating steps while a condition holds)."},
+        {q:"Q4. What symbol do you use for Input/Output in a flowchart?", a:"Parallelogram. Used for both reading input (e.g., Read X) and displaying output (e.g., Print Result)."},
+        {q:"Q5. A student wrote a flowchart that never reaches END. What property is violated?", a:"Finiteness — A valid algorithm must terminate. The student's loop has no exit condition, creating an infinite loop."}
+      ].map(sq=>`<div class="mcq-item"><p class="q">${sq.q}</p><button class="show-ans-btn" onclick="toggleAns(this)">Show Answer</button><div class="mcq-ans">${sq.a}</div></div>`).join('')}
+      <h3>Scenario-Based (Long Questions)</h3>
+      <div class="scenario-box"><div class="label">Scenario</div><p>A school wants to automate grade reporting. Students enter marks for 5 subjects. The system calculates average, then prints "Distinction" (≥85), "Pass" (≥50), or "Fail". Design the algorithm and draw a flowchart.</p><button class="show-ans-btn" onclick="toggleScenario(this)">Show Full Answer</button><div class="scenario-ans"><p><strong>Algorithm:</strong><br>1. Start<br>2. Set sum=0, i=1<br>3. While i≤5: Read mark, Sum=Sum+mark, i=i+1<br>4. Avg = Sum/5<br>5. If Avg≥85: Print "Distinction" / Elif Avg≥50: Print "Pass" / Else: Print "Fail"<br>6. End<br><br><strong>Key flowchart elements:</strong> One loop (repeat 5 times) + Two decision diamonds (≥85? and ≥50?) + Three output paths</p></div></div>
+    </div>`,
+
+    // 7: Exam Strategy
+    `<div class="card">
+      <h2>Exam Strategy — Algorithms & Flowcharts</h2>
+      <div class="exam-tip"><div class="tip-icon">⏱</div><div class="tip-text"><strong>Time trick:</strong> Flowchart questions give max marks for least writing. Practice drawing the 4 main symbols quickly — they are always the same.</div></div>
+      <div class="exam-tip"><div class="tip-icon">✅</div><div class="tip-text"><strong>Always label decision exits:</strong> Write YES/NO clearly on both branches of every diamond. Examiners deduct marks if unlabeled.</div></div>
+      <div class="exam-tip"><div class="tip-icon">⚠</div><div class="tip-text"><strong>Common trap:</strong> Exams show a flowchart with an infinite loop and ask "what is wrong?" — answer: missing exit condition, violates Finiteness.</div></div>
+      <div class="exam-tip"><div class="tip-icon">📌</div><div class="tip-text"><strong>Symbol trap:</strong> Some students use rectangle for decision — always use diamond. Mixing symbols loses marks.</div></div>
+      <div class="exam-tip"><div class="tip-icon">💡</div><div class="tip-text"><strong>Scenario approach:</strong> Underline key words: "check" = decision diamond, "repeat/for each" = loop, "calculate" = process rectangle, "display/print" = parallelogram.</div></div>
+      <div class="exam-tip"><div class="tip-icon">🎯</div><div class="tip-text"><strong>Must memorize:</strong> The 5 algorithm properties. Exams love "which property is violated?" questions.</div></div>
+      <button class="ask-claude-btn" onclick="sendPrompt('Give me 3 more flowchart practice problems for my AICT midterm exam')">Ask for more practice problems ↗</button>
+    </div>`
+  ]
+},
+
+{
+  title: "Number Systems",
+  color: "teal",
+  sections: ["Notes", "Mind Map", "Conversion Tables", "ELI10", "Step-by-Step Conversions", "Practice MCQs", "Short Qs", "Exam Strategy"],
+  content: [
+    `<div class="card">
+      <h2>Complete Notes — Number Systems</h2>
+      <table class="tt">
+        <tr><th>System</th><th>Base</th><th>Digits Used</th><th>Prefix</th></tr>
+        <tr><td>Binary</td><td>2</td><td>0, 1</td><td>0b</td></tr>
+        <tr><td>Octal</td><td>8</td><td>0–7</td><td>0o</td></tr>
+        <tr><td>Decimal</td><td>10</td><td>0–9</td><td>(none)</td></tr>
+        <tr><td>Hexadecimal</td><td>16</td><td>0–9, A–F</td><td>0x</td></tr>
+      </table>
+      <h3>Hex Letter Values</h3>
+      <table class="tt">
+        <tr><th>Letter</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr>
+        <tr><td>Value</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td></tr>
+      </table>
+      <h3>Binary Position Values</h3>
+      <div class="mono">Position:  7    6    5    4    3    2    1    0
+Value:   128   64   32   16    8    4    2    1</div>
+      <h3>Binary Addition Rules</h3>
+      <table class="tt">
+        <tr><th>A</th><th>B</th><th>Sum</th><th>Carry</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+        <tr><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+        <tr><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+        <tr><td>1</td><td>1</td><td>1 (with carry)</td><td>1</td></tr>
+      </table>
+      <h3>Binary Multiplication Rules</h3>
+      <table class="tt">
+        <tr><th>A</th><th>B</th><th>Product</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>1</td><td>0</td></tr>
+        <tr><td>1</td><td>0</td><td>0</td></tr>
+        <tr><td>1</td><td>1</td><td>1</td></tr>
+      </table>
+      <div class="warn-box"><p><strong>Common Mistakes:</strong> Forgetting to carry in binary addition · Confusing Hex A-F values · Wrong grouping for Binary↔Octal (groups of 3) vs Binary↔Hex (groups of 4)</p></div>
+    </div>
+    <div class="card">
+      <h2>Key Conversion Rules</h2>
+      <ul>
+        <li><strong>Decimal → Binary:</strong> Divide by 2, collect remainders bottom-up</li>
+        <li><strong>Binary → Decimal:</strong> Multiply each bit by 2^position, add all</li>
+        <li><strong>Binary → Octal:</strong> Group bits in 3s from right, convert each group</li>
+        <li><strong>Binary → Hex:</strong> Group bits in 4s from right, convert each group</li>
+        <li><strong>Octal → Binary:</strong> Convert each octal digit to 3-bit binary</li>
+        <li><strong>Hex → Binary:</strong> Convert each hex digit to 4-bit binary</li>
+        <li><strong>Decimal → Octal:</strong> Divide by 8, collect remainders</li>
+        <li><strong>Decimal → Hex:</strong> Divide by 16, collect remainders (use A-F for 10-15)</li>
+      </ul>
+    </div>`,
+
+    `<div class="card">
+      <h2>Mind Map — Number Systems</h2>
+      <div class="mindmap">
+<span class="root">NUMBER SYSTEMS</span>
+├── BASES
+│   ├── Binary (Base 2) → 0,1
+│   ├── Octal (Base 8) → 0-7
+│   ├── Decimal (Base 10) → 0-9 [everyday]
+│   └── Hexadecimal (Base 16) → 0-9, A-F
+│
+├── CONVERSIONS (all route through Binary)
+│   ├── Decimal → Binary: divide by 2
+│   ├── Binary → Decimal: powers of 2
+│   ├── Binary ↔ Octal: groups of 3 bits
+│   └── Binary ↔ Hex: groups of 4 bits
+│
+├── BINARY ARITHMETIC
+│   ├── Addition: 0+0=0, 0+1=1, 1+1=10 (carry)
+│   ├── Multiplication: same as decimal but 1×1=1 only
+│   └── Key rule: 1+1+1 = 11 (sum=1, carry=1)
+│
+└── WHY BINARY?
+    ├── Computers use ON(1) and OFF(0)
+    ├── Electronic circuits = 2 states
+    └── Simple, reliable hardware</div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Quick Conversion Reference Table</h2>
+      <table class="tt">
+        <tr><th>Decimal</th><th>Binary</th><th>Octal</th><th>Hex</th></tr>
+        <tr><td>0</td><td>0000</td><td>0</td><td>0</td></tr>
+        <tr><td>1</td><td>0001</td><td>1</td><td>1</td></tr>
+        <tr><td>2</td><td>0010</td><td>2</td><td>2</td></tr>
+        <tr><td>3</td><td>0011</td><td>3</td><td>3</td></tr>
+        <tr><td>4</td><td>0100</td><td>4</td><td>4</td></tr>
+        <tr><td>5</td><td>0101</td><td>5</td><td>5</td></tr>
+        <tr><td>6</td><td>0110</td><td>6</td><td>6</td></tr>
+        <tr><td>7</td><td>0111</td><td>7</td><td>7</td></tr>
+        <tr><td>8</td><td>1000</td><td>10</td><td>8</td></tr>
+        <tr><td>9</td><td>1001</td><td>11</td><td>9</td></tr>
+        <tr><td>10</td><td>1010</td><td>12</td><td>A</td></tr>
+        <tr><td>11</td><td>1011</td><td>13</td><td>B</td></tr>
+        <tr><td>12</td><td>1100</td><td>14</td><td>C</td></tr>
+        <tr><td>13</td><td>1101</td><td>15</td><td>D</td></tr>
+        <tr><td>14</td><td>1110</td><td>16</td><td>E</td></tr>
+        <tr><td>15</td><td>1111</td><td>17</td><td>F</td></tr>
+        <tr><td>16</td><td>10000</td><td>20</td><td>10</td></tr>
+      </table>
+      <div class="tip-box"><p><strong>Exam shortcut:</strong> Memorize 0–15 conversions above. Almost all exam questions use numbers in this range.</p></div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Explain Like I'm 10 — Number Systems</h2>
+      <h3>Why do computers use binary?</h3>
+      <p>Imagine a light switch — it's either ON or OFF. Computers are made of millions of tiny switches. ON = 1, OFF = 0. So computers speak in 1s and 0s. That's Binary!</p>
+      <h3>What's Hexadecimal?</h3>
+      <p>Binary numbers get VERY long. 255 in binary is 11111111 — 8 digits! Hex shortens it to "FF" — just 2 digits. Programmers love hex because it's compact. Think of it as a ZIP code for binary numbers.</p>
+      <h3>Octal?</h3>
+      <p>Old computer systems used octal (base 8) because it maps neatly to groups of 3 binary digits. Not used much today, but still tested in exams!</p>
+      <h3>The "division ladder" trick for decimal → binary</h3>
+      <p>Keep dividing by 2 and collect remainders like picking up coins from the bottom of a well — read them from bottom to top!</p>
+    </div>`,
+
+    `<div class="card">
+      <h2>Step-by-Step Conversions</h2>
+      <h3>Decimal 45 → Binary</h3>
+      <div class="mono">45 ÷ 2 = 22  remainder 1  ↑
+22 ÷ 2 = 11  remainder 0  ↑
+11 ÷ 2 = 5   remainder 1  ↑
+ 5 ÷ 2 = 2   remainder 1  ↑
+ 2 ÷ 2 = 1   remainder 0  ↑
+ 1 ÷ 2 = 0   remainder 1  ↑ (read up!)
+
+Answer: 45₁₀ = 101101₂</div>
+      <h3>Binary 101101 → Decimal</h3>
+      <div class="mono">1×2⁵ + 0×2⁴ + 1×2³ + 1×2² + 0×2¹ + 1×2⁰
+= 32  +  0  +  8  +  4  +  0  +  1
+= 45₁₀</div>
+      <h3>Binary → Octal (group by 3 from right)</h3>
+      <div class="mono">101101
+→ 101 | 101
+→   5 |   5
+Answer: 55₈</div>
+      <h3>Binary → Hex (group by 4 from right)</h3>
+      <div class="mono">00101101
+→ 0010 | 1101
+→    2  |   D
+Answer: 2D₁₆</div>
+      <h3>Binary Addition: 1011 + 0110</h3>
+      <div class="mono">  1011
++ 0110
+------
+  1  1  0  1   ← bit sum
+  1  1  0       ← carries (read right to left)
+------
+ 10001  = 17₁₀ ✓ (11+6=17)</div>
+      <h3>Binary Multiplication: 1011 × 101</h3>
+      <div class="mono">    1011   (= 11)
+  ×   101   (= 5)
+  -------
+    1011   × 1 (rightmost bit)
+   0000    × 0 (shift 1 left)
+  1011     × 1 (shift 2 left)
+  -------
+  110111   = 55₁₀ ✓ (11×5=55)</div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Practice MCQs — Number Systems</h2>
+      ${[
+        {q:"1. What is 13 in binary?", opts:["a) 1011","b) 1101","c) 1110","d) 1001"], ans:"b) 1101 — 8+4+0+1 = 13. Memorize from the conversion table!"},
+        {q:"2. Binary 1010 equals which decimal?", opts:["a) 5","b) 8","c) 10","d) 12"], ans:"c) 10 — 1×8 + 0×4 + 1×2 + 0×1 = 10"},
+        {q:"3. How many digits does Hexadecimal use?", opts:["a) 8","b) 10","c) 16","d) 2"], ans:"c) 16 — digits 0-9 and letters A-F (A=10 through F=15)"},
+        {q:"4. To convert binary to octal, bits are grouped in:", opts:["a) 2s","b) 3s","c) 4s","d) 8s"], ans:"b) 3s — Each group of 3 binary digits = 1 octal digit"},
+        {q:"5. What is 1111 in decimal?", opts:["a) 12","b) 13","c) 14","d) 15"], ans:"d) 15 — 8+4+2+1 = 15. Also = F in hex!"},
+        {q:"6. What does 1+1 equal in binary?", opts:["a) 2","b) 10","c) 11","d) 1"], ans:"b) 10 — In binary, 1+1 = 0 with carry 1, written as 10 (one-zero)"},
+        {q:"7. Hex F equals decimal:", opts:["a) 6","b) 12","c) 15","d) 16"], ans:"c) 15 — F is the 16th hex digit (starting from 0), value = 15"},
+        {q:"8. Convert octal 17 to decimal:", opts:["a) 15","b) 17","c) 14","d) 8"], ans:"a) 15 — 1×8 + 7×1 = 8+7 = 15"},
+        {q:"9. The base of the octal system is:", opts:["a) 2","b) 8","c) 16","d) 10"], ans:"b) 8 — Octal uses 8 digits: 0 through 7"},
+        {q:"10. Binary multiplication 1×1 equals:", opts:["a) 0","b) 10","c) 1","d) 11"], ans:"c) 1 — Binary multiplication follows the same rules as decimal: 1×1=1"}
+      ].map(q=>`<div class="mcq-item"><p class="q">${q.q}</p>${q.opts.map(o=>`<div class="mcq-opt">${o}</div>`).join('')}<button class="show-ans-btn" onclick="toggleAns(this)">Show Answer</button><div class="mcq-ans">${q.ans}</div></div>`).join('')}
+    </div>`,
+
+    `<div class="card">
+      <h2>Short Questions & Answers</h2>
+      ${[
+        {q:"Q1. Why do computers use binary instead of decimal?", a:"Computers use electronic circuits that have two states: ON and OFF. Binary maps perfectly to these states (1=ON, 0=OFF). Decimal would require 10 distinct voltage levels, making hardware complex and unreliable."},
+        {q:"Q2. Convert 255₁₀ to binary and hex.", a:"255 in binary: 11111111 (all 8 bits = 1). In hex: FF. Both are the maximum values for 8-bit and 2-hex-digit representations. Quick check: 128+64+32+16+8+4+2+1 = 255."},
+        {q:"Q3. What is the rule for binary addition when both bits are 1?", a:"1+1 = 0 (sum) with a carry of 1. Written as '10' in binary (one-zero, not ten). If there's already a carry: 1+1+1 = 1 with carry 1 (written as '11')."},
+        {q:"Q4. Convert hex 1A to decimal.", a:"1A hex: 1×16¹ + 10×16⁰ = 16+10 = 26₁₀. Remember A=10 in hexadecimal."},
+        {q:"Q5. What is the shortcut for Binary to Octal conversion?", a:"Group binary digits into sets of 3 from the right (add leading zeros if needed), then convert each group to its octal equivalent (000=0 through 111=7)."}
+      ].map(sq=>`<div class="mcq-item"><p class="q">${sq.q}</p><button class="show-ans-btn" onclick="toggleAns(this)">Show Answer</button><div class="mcq-ans">${sq.a}</div></div>`).join('')}
+      <div class="scenario-box"><div class="label">Scenario Question</div><p>A programmer is storing color values in a program. She uses the hex code #FF8C00. Convert each pair to decimal to find the RGB values and explain why hex is preferred for colors.</p><button class="show-ans-btn" onclick="toggleScenario(this)">Show Answer</button><div class="scenario-ans"><p>FF = 255, 8C = 140, 00 = 0. RGB = (255, 140, 0) = dark orange. Hex is preferred because: 1) Compact — 6 hex digits vs up to 9 decimal digits. 2) Easy to read/compare visually. 3) Maps directly to 8-bit binary (one byte per channel).</p></div></div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Exam Strategy — Number Systems</h2>
+      <div class="exam-tip"><div class="tip-icon">🔢</div><div class="tip-text"><strong>Fastest approach:</strong> For binary→decimal, write position values (128,64,32,16,8,4,2,1) above each bit and add only the positions with a 1.</div></div>
+      <div class="exam-tip"><div class="tip-icon">📝</div><div class="tip-text"><strong>Show all working:</strong> Write out each division step or multiplication step. You get partial marks even if final answer is wrong.</div></div>
+      <div class="exam-tip"><div class="tip-icon">⚠</div><div class="tip-text"><strong>Common trap:</strong> When adding binary numbers with carries, track them carefully. Write carries ABOVE the column being added, not below.</div></div>
+      <div class="exam-tip"><div class="tip-icon">✅</div><div class="tip-text"><strong>Always verify:</strong> After conversion, convert back to check. Binary 1010 → Decimal 10 → Binary 1010. If it matches, you're correct.</div></div>
+      <div class="exam-tip"><div class="tip-icon">💡</div><div class="tip-text"><strong>Memory trick for hex:</strong> "All Boys Can Do Extra Fun" = A=10, B=11, C=12, D=13, E=14, F=15</div></div>
+      <button class="ask-claude-btn" onclick="sendPrompt('Give me 5 binary addition and multiplication practice problems with solutions for my exam')">Get more number system problems ↗</button>
+    </div>`
+  ]
+},
+
+{
+  title: "Network Topologies",
+  color: "coral",
+  sections: ["Notes", "Mind Map", "Diagrams", "ELI10", "Comparison Table", "Practice MCQs", "Scenarios", "Exam Strategy"],
+  content: [
+    `<div class="card">
+      <h2>Complete Notes — Network Topologies</h2>
+      <p>A <strong>network topology</strong> describes the arrangement/layout of computers and devices in a network — both physically (how cables run) and logically (how data flows).</p>
+      <h3>1. Bus Topology</h3>
+      <p>All devices connect to a single central cable (the "bus" or backbone). Data travels in both directions along the bus.</p>
+      <ul><li><strong>Advantage:</strong> Simple, cheap, easy to install</li><li><strong>Disadvantage:</strong> If the bus fails, entire network goes down. Collisions occur with heavy traffic.</li><li><strong>Use:</strong> Small LANs, old Ethernet (10Base2)</li></ul>
+      <h3>2. Star Topology</h3>
+      <p>All devices connect to a central hub or switch. Data passes through the hub.</p>
+      <ul><li><strong>Advantage:</strong> Easy to add/remove devices, failure of one node doesn't affect others, easy to troubleshoot</li><li><strong>Disadvantage:</strong> Hub/switch is single point of failure. More cable needed.</li><li><strong>Use:</strong> Most common in homes and offices today (Wi-Fi router = hub)</li></ul>
+      <h3>3. Ring Topology</h3>
+      <p>Devices connect in a circular loop. Data travels in one (or both) direction(s) around the ring using a "token".</p>
+      <ul><li><strong>Advantage:</strong> Equal access for all devices, no collisions (token-based)</li><li><strong>Disadvantage:</strong> If one device fails, the whole ring can fail. Slow for large networks.</li><li><strong>Use:</strong> Token Ring networks (IBM legacy), SONET in WANs</li></ul>
+      <h3>4. Mesh Topology</h3>
+      <p>Every device connects directly to every other device. Full mesh = n(n-1)/2 connections.</p>
+      <ul><li><strong>Advantage:</strong> Highly reliable, multiple paths for data, excellent fault tolerance</li><li><strong>Disadvantage:</strong> Very expensive, complex cabling, hard to install</li><li><strong>Use:</strong> Military networks, internet backbone, banking systems</li></ul>
+      <h3>5. Hybrid Topology</h3>
+      <p>Combination of two or more topologies. E.g., Star-Bus or Star-Ring.</p>
+      <ul><li><strong>Use:</strong> Large enterprise networks, universities, hospitals</li></ul>
+      <div class="warn-box"><p><strong>Common Mistakes:</strong> Confusing physical vs logical topology · Saying hub failure = ring failure (it's star!) · Forgetting mesh formula n(n-1)/2</p></div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Mind Map — Network Topologies</h2>
+      <div class="mindmap">
+<span class="root">NETWORK TOPOLOGIES</span>
+├── BUS
+│   ├── Single backbone cable
+│   ├── Terminators at both ends (important!)
+│   ├── Cheap & simple
+│   ├── Fail point: backbone cable
+│   └── Use: Small old LANs
+│
+├── STAR
+│   ├── Central hub/switch
+│   ├── Most COMMON today
+│   ├── Fail point: Hub/Switch
+│   ├── Advantages: Easy manage, fault isolation
+│   └── Use: Homes, offices, Wi-Fi
+│
+├── RING
+│   ├── Circular connection
+│   ├── Token passing protocol
+│   ├── No collisions
+│   ├── Fail point: Any single node
+│   └── Use: SONET, Token Ring (legacy)
+│
+├── MESH
+│   ├── Every device ↔ every other device
+│   ├── Connections = n(n-1)/2
+│   ├── Most RELIABLE
+│   ├── Most EXPENSIVE
+│   └── Use: Military, Internet backbone
+│
+└── HYBRID
+    ├── Mix of 2+ topologies
+    └── Use: Universities, enterprises</div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Network Topology Diagrams (Text-Based)</h2>
+      <h3>Bus Topology</h3>
+      <div class="mono">|--[PC1]--[PC2]--[PC3]--[PC4]--|
+T                              T
+(T = Terminator at each end)</div>
+      <h3>Star Topology</h3>
+      <div class="mono">       [PC1]
+         |
+[PC4]--[HUB/SWITCH]--[PC2]
+         |
+       [PC3]
+(All devices connect TO the hub)</div>
+      <h3>Ring Topology</h3>
+      <div class="mono">[PC1] → [PC2]
+  ↑              ↓
+[PC4] ← [PC3]
+(Data flows in one direction around the ring)</div>
+      <h3>Mesh Topology (4 nodes)</h3>
+      <div class="mono">[PC1]---[PC2]
+  |  ×      |
+[PC4]---[PC3]
+(Every device connects to every other device)
+Connections = 4(4-1)/2 = 6 cables</div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Explain Like I'm 10 — Network Topologies</h2>
+      <h3>Bus = One road, everyone shares it</h3>
+      <p>Imagine one long road through a village. All houses are on this road. If the road breaks in the middle, no one can pass. That's a bus network — one shared cable, one failure = everyone offline.</p>
+      <h3>Star = Airport hub</h3>
+      <p>All flights go through one big airport (hub). If your computer needs to talk to another computer, both signals pass through the hub. If the hub breaks, nobody can communicate — but if one computer breaks, others are fine.</p>
+      <h3>Ring = A game of telephone in a circle</h3>
+      <p>Kids sit in a circle and pass a note around. Only the kid holding the note can speak — that's the "token". If one kid leaves the circle, the note can't pass anymore.</p>
+      <h3>Mesh = Everyone has everyone's phone number</h3>
+      <p>Every person can call any other person directly. If one person's phone breaks, everyone else can still call each other. Very reliable — but very expensive!</p>
+    </div>`,
+
+    `<div class="card">
+      <h2>Comparison Table</h2>
+      <table class="tt">
+        <tr><th>Feature</th><th>Bus</th><th>Star</th><th>Ring</th><th>Mesh</th></tr>
+        <tr><td>Cost</td><td>Low</td><td>Medium</td><td>Medium</td><td>Very High</td></tr>
+        <tr><td>Reliability</td><td>Low</td><td>Medium</td><td>Low</td><td>Very High</td></tr>
+        <tr><td>Scalability</td><td>Low</td><td>High</td><td>Medium</td><td>Low</td></tr>
+        <tr><td>Single Fail Point</td><td>Backbone</td><td>Hub/Switch</td><td>Any node</td><td>None</td></tr>
+        <tr><td>Speed</td><td>Slow (shared)</td><td>Fast</td><td>Moderate</td><td>Fast</td></tr>
+        <tr><td>Common Use</td><td>Old LANs</td><td>Offices/Homes</td><td>SONET/WAN</td><td>Military/Internet</td></tr>
+        <tr><td>Cable needed</td><td>Least</td><td>Medium</td><td>Medium</td><td>Most</td></tr>
+      </table>
+      <div class="tip-box"><p><strong>Exam shortcut:</strong> For topology selection scenarios — if they say "reliable/fault-tolerant" → Mesh. "Common office/home" → Star. "Cheapest/simplest" → Bus. "Critical data/no failure" → Mesh.</p></div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Practice MCQs — Network Topologies</h2>
+      ${[
+        {q:"1. Which topology uses a central hub or switch?", opts:["a) Bus","b) Ring","c) Mesh","d) Star"], ans:"d) Star — All devices connect to a central hub/switch. Most common topology today."},
+        {q:"2. The formula for cables in full mesh topology is:", opts:["a) n×2","b) n-1","c) n(n-1)/2","d) n+1"], ans:"c) n(n-1)/2 — For 4 nodes: 4×3÷2 = 6 cables."},
+        {q:"3. In bus topology, what is placed at both ends of the cable?", opts:["a) Hub","b) Switch","c) Terminator","d) Router"], ans:"c) Terminator — Prevents signal bounce at the cable ends."},
+        {q:"4. Which topology has NO single point of failure?", opts:["a) Star","b) Bus","c) Ring","d) Mesh"], ans:"d) Mesh — Multiple paths exist, so any single failure doesn't disrupt the network."},
+        {q:"5. Token passing is associated with which topology?", opts:["a) Bus","b) Star","c) Ring","d) Mesh"], ans:"c) Ring — Token Ring uses a token to control access, preventing data collisions."},
+        {q:"6. Which topology is most expensive to install?", opts:["a) Bus","b) Ring","c) Star","d) Mesh"], ans:"d) Mesh — Requires n(n-1)/2 cables; 10 devices = 45 cables!"},
+        {q:"7. If the hub fails in a star topology:", opts:["a) Only one PC goes offline","b) The whole network fails","c) Alternate paths are used","d) Ring mode activates"], ans:"b) Whole network fails — The hub is the single point of failure in star topology."},
+        {q:"8. Which topology is most commonly used in modern homes?", opts:["a) Bus","b) Ring","c) Star","d) Mesh"], ans:"c) Star — Your Wi-Fi router is the hub; all devices connect through it."},
+        {q:"9. In ring topology, if one node fails:", opts:["a) Network continues normally","b) Only that node goes offline","c) The entire ring may fail","d) Data reroutes automatically"], ans:"c) The entire ring may fail — Unless it's a dual-ring system with fault tolerance."},
+        {q:"10. A university uses Star-Bus combined. This is called:", opts:["a) Mesh","b) Ring","c) Hybrid","d) Extended Bus"], ans:"c) Hybrid — Combination of two or more topology types."}
+      ].map(q=>`<div class="mcq-item"><p class="q">${q.q}</p>${q.opts.map(o=>`<div class="mcq-opt">${o}</div>`).join('')}<button class="show-ans-btn" onclick="toggleAns(this)">Show Answer</button><div class="mcq-ans">${q.ans}</div></div>`).join('')}
+    </div>`,
+
+    `<div class="card">
+      <h2>Scenario-Based Questions</h2>
+      <div class="scenario-box"><div class="label">Scenario 1 — Bank</div><p>A bank needs a network for its 50 branches. Each branch must remain operational even if other branches experience failures. Data security and reliability are the top priorities. Which topology should they use? Justify with 3 reasons.</p><button class="show-ans-btn" onclick="toggleScenario(this)">Show Answer</button><div class="scenario-ans"><p><strong>Answer: Mesh Topology</strong><br>1. No single point of failure — if one connection fails, data routes through alternate paths<br>2. High reliability — critical for banking transactions<br>3. Fault tolerance — meets the "branch must remain operational" requirement<br>Drawback mentioned: Expensive to implement, but justified by the critical nature of banking data.</p></div></div>
+      <div class="scenario-box"><div class="label">Scenario 2 — Small Office</div><p>A 10-person startup needs a cheap, easy-to-manage network. They expect to grow to 20 people in 2 years. Budget is limited. Which topology is best and why?</p><button class="show-ans-btn" onclick="toggleScenario(this)">Show Answer</button><div class="scenario-ans"><p><strong>Answer: Star Topology</strong><br>1. Easy to add new devices — just plug into the hub/switch (scalable for growth)<br>2. Fault isolation — if one computer fails, others keep working<br>3. Relatively affordable — only needs one switch + individual cables<br>Not Bus (not scalable, hard to troubleshoot). Not Mesh (too expensive for a startup).</p></div></div>
+      <div class="scenario-box"><div class="label">Scenario 3 — Hospital</div><p>A hospital has 3 departments: Emergency, Labs, Administration. Each department has a star network internally. The departments need to communicate with each other reliably. Design the inter-department network.</p><button class="show-ans-btn" onclick="toggleScenario(this)">Show Answer</button><div class="scenario-ans"><p><strong>Answer: Hybrid Topology (Star-Mesh or Star-Bus)</strong><br>Each department = internal Star network (hub at center)<br>Inter-department = Mesh connections between the 3 department hubs<br>This gives: reliability across departments (mesh) + easy management within departments (star)<br>This is a Hybrid topology — most large organizations use this approach.</p></div></div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Exam Strategy — Network Topologies</h2>
+      <div class="exam-tip"><div class="tip-icon">🎯</div><div class="tip-text"><strong>For topology selection scenarios:</strong> Look for keywords. "Reliable/critical" → Mesh. "Cheap/simple" → Bus. "Easy add/remove" → Star. "Circular/token" → Ring.</div></div>
+      <div class="exam-tip"><div class="tip-icon">📐</div><div class="tip-text"><strong>Always show mesh formula:</strong> If asked how many cables for N devices in mesh: n(n-1)/2. E.g., 6 devices = 6×5÷2 = 15 cables.</div></div>
+      <div class="exam-tip"><div class="tip-icon">⚠</div><div class="tip-text"><strong>Trap:</strong> "Failure of one node brings down the network" — This is Ring AND Bus, NOT just bus. Be specific about WHICH failure.</div></div>
+      <div class="exam-tip"><div class="tip-icon">✅</div><div class="tip-text"><strong>Draw advantage/disadvantage:</strong> For long questions, always give at least 2 advantages AND 2 disadvantages for any topology.</div></div>
+      <button class="ask-claude-btn" onclick="sendPrompt('Give me 3 more network topology scenario questions with answers for exam practice')">More topology scenarios ↗</button>
+    </div>`
+  ]
+},
+
+{
+  title: "SDLC",
+  color: "amber",
+  sections: ["Notes", "Mind Map", "Phases Diagram", "ELI10", "Scenarios", "Practice MCQs", "Short Qs", "Exam Strategy"],
+  content: [
+    `<div class="card">
+      <h2>Complete Notes — SDLC</h2>
+      <p><strong>SDLC</strong> (System Development Life Cycle) is a structured process used to plan, create, test, and deploy an information system. It ensures quality and systematic development.</p>
+      <h3>The 6 Phases of SDLC</h3>
+      <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Planning:</strong> Define the problem. Feasibility study (technical, economic, operational). Determine if the project is worth doing. Output: Feasibility Report.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Analysis:</strong> Gather requirements from users/stakeholders. What does the system need to do? Tools: interviews, surveys, observation. Output: Requirements Specification Document (SRS).</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Design:</strong> HOW will the system work? Database design, UI design, system architecture. Output: System Design Document, ERD, DFD.</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Implementation (Coding):</strong> Programmers write the actual code based on design specs. Modules developed and integrated. Output: Working Code.</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content"><strong>Testing:</strong> Find and fix bugs. Unit testing, integration testing, user acceptance testing (UAT). Output: Tested, approved system.</div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-content"><strong>Maintenance:</strong> After deployment — fix bugs, add features, update for new requirements. Ongoing phase. Types: corrective, adaptive, perfective.</div></div>
+      <h3>SDLC Models</h3>
+      <table class="tt">
+        <tr><th>Model</th><th>Description</th><th>Best For</th></tr>
+        <tr><td>Waterfall</td><td>Sequential, one phase at a time</td><td>Clear, fixed requirements</td></tr>
+        <tr><td>Agile</td><td>Iterative, small cycles (sprints)</td><td>Changing requirements</td></tr>
+        <tr><td>Spiral</td><td>Risk-driven iterations</td><td>Large/complex systems</td></tr>
+        <tr><td>Prototype</td><td>Build mock version first</td><td>Unclear requirements</td></tr>
+      </table>
+      <div class="warn-box"><p><strong>Common Mistakes:</strong> Confusing Analysis (WHAT) with Design (HOW) · Thinking maintenance is optional · Confusing waterfall and agile scenarios</p></div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Mind Map — SDLC</h2>
+      <div class="mindmap">
+<span class="root">SDLC — SYSTEM DEVELOPMENT LIFE CYCLE</span>
+├── PHASE 1: PLANNING
+│   ├── Define problem/objectives
+│   ├── Feasibility: Technical, Economic, Operational
+│   └── Output: Feasibility Report
+│
+├── PHASE 2: ANALYSIS
+│   ├── Gather requirements (interviews, surveys)
+│   ├── Study current system
+│   └── Output: SRS (Software Requirements Specification)
+│
+├── PHASE 3: DESIGN
+│   ├── System architecture
+│   ├── Database design (ERD)
+│   ├── UI/UX mockups
+│   └── Output: Design Document
+│
+├── PHASE 4: IMPLEMENTATION
+│   ├── Actual coding
+│   ├── Module development
+│   └── Output: Source Code
+│
+├── PHASE 5: TESTING
+│   ├── Unit → Integration → System → UAT
+│   ├── Bug reports
+│   └── Output: Approved System
+│
+├── PHASE 6: MAINTENANCE
+│   ├── Corrective (fix bugs)
+│   ├── Adaptive (new OS/hardware)
+│   └── Perfective (add features)
+│
+└── MODELS
+    ├── Waterfall (linear)
+    ├── Agile (iterative)
+    ├── Spiral (risk-based)
+    └── Prototype (mockup-first)</div>
+    </div>`,
+
+    `<div class="card">
+      <h2>SDLC Phases — Flow Diagram</h2>
+      <div class="mono">
+┌─────────────────────────────────────────┐
+│  1. PLANNING                            │
+│     Define scope → Feasibility study    │
+└───────────────┬─────────────────────────┘
+                ↓
+┌─────────────────────────────────────────┐
+│  2. ANALYSIS                            │
+│     Gather requirements → SRS document  │
+└───────────────┬─────────────────────────┘
+                ↓
+┌─────────────────────────────────────────┐
+│  3. DESIGN                              │
+│     DB design, UI mockups, architecture │
+└───────────────┬─────────────────────────┘
+                ↓
+┌─────────────────────────────────────────┐
+│  4. IMPLEMENTATION                      │
+│     Code writing, module integration    │
+└───────────────┬─────────────────────────┘
+                ↓
+┌─────────────────────────────────────────┐
+│  5. TESTING                             │
+│     Unit → Integration → UAT → Approve  │
+└───────────────┬─────────────────────────┘
+                ↓
+┌─────────────────────────────────────────┐
+│  6. MAINTENANCE                         │
+│     Bug fixes, updates, enhancements    │
+└─────────────────────────────────────────┘
+                ↑ (cycle repeats)
+</div>
+      <div class="tip-box"><p><strong>Memory trick:</strong> <strong>P</strong>lease <strong>A</strong>lways <strong>D</strong>esign <strong>I</strong>ntelligent <strong>T</strong>ested <strong>M</strong>odules = Planning, Analysis, Design, Implementation, Testing, Maintenance</p></div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Explain Like I'm 10 — SDLC</h2>
+      <h3>Building a House Analogy</h3>
+      <p><strong>Planning</strong> = Deciding to build a house. Can we afford it? What land do we need? Is it feasible?</p>
+      <p><strong>Analysis</strong> = Asking the family: How many rooms? How many floors? Do you want a garage? (Gathering requirements)</p>
+      <p><strong>Design</strong> = The architect draws blueprints — floor plans, where doors go, electric wiring plan.</p>
+      <p><strong>Implementation</strong> = Workers actually BUILD the house (pour concrete, build walls, install windows).</p>
+      <p><strong>Testing</strong> = Check if everything works: does the water flow? Do doors open? Is the roof waterproof?</p>
+      <p><strong>Maintenance</strong> = After you move in, you fix leaks, paint walls, add a new room later.</p>
+      <div class="tip-box"><p>Every software project follows these same 6 stages — just like building a house!</p></div>
+    </div>`,
+
+    `<div class="card">
+      <h2>SDLC Scenario-Based Questions</h2>
+      <div class="scenario-box"><div class="label">Scenario 1</div><p>A hospital wants to replace its paper-based patient record system with a digital one. The IT team starts by meeting with doctors, nurses, and administrators to understand what information needs to be recorded, who accesses it, and how often. Which SDLC phase is this? What tools would they use?</p><button class="show-ans-btn" onclick="toggleScenario(this)">Show Answer</button><div class="scenario-ans"><p><strong>Phase: Analysis</strong><br>They are gathering requirements from stakeholders (doctors, nurses, admins).<br><strong>Tools used:</strong> Interviews, surveys/questionnaires, observation of current workflow, document review (existing forms).<br><strong>Output:</strong> Software Requirements Specification (SRS) — a document listing all system requirements.</p></div></div>
+      <div class="scenario-box"><div class="label">Scenario 2</div><p>During the launch of a school management system, students notice that the grade entry form crashes when a teacher enters more than 5 subjects. A team is assigned to fix this bug. Which SDLC phase is this? What type of maintenance?</p><button class="show-ans-btn" onclick="toggleScenario(this)">Show Answer</button><div class="scenario-ans"><p><strong>Phase: Maintenance</strong><br><strong>Type: Corrective Maintenance</strong> — Fixing bugs/errors discovered after deployment.<br>The system is already live (deployed), so this is not the Testing phase. Testing happens BEFORE deployment. After release, all fixes are Maintenance.</p></div></div>
+      <div class="scenario-box"><div class="label">Scenario 3</div><p>An e-commerce company wants a new website. Requirements keep changing weekly as the marketing team adds new ideas. Which SDLC model should be chosen and why?</p><button class="show-ans-btn" onclick="toggleScenario(this)">Show Answer</button><div class="scenario-ans"><p><strong>Model: Agile</strong><br>Reason: Requirements are changing frequently. Agile works in short "sprints" (1-4 weeks), allowing the team to adapt to new requirements at the end of each sprint. Waterfall would fail here because it requires fixed requirements at the start and going back is very costly.</p></div></div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Practice MCQs — SDLC</h2>
+      ${[
+        {q:"1. Which phase produces the Software Requirements Specification (SRS)?", opts:["a) Planning","b) Analysis","c) Design","d) Testing"], ans:"b) Analysis — The SRS documents all functional and non-functional requirements gathered from stakeholders."},
+        {q:"2. The feasibility study is conducted in which phase?", opts:["a) Analysis","b) Design","c) Planning","d) Implementation"], ans:"c) Planning — Feasibility (technical, economic, operational) is assessed in the Planning phase to decide if the project is worthwhile."},
+        {q:"3. Which SDLC model is best when requirements change frequently?", opts:["a) Waterfall","b) Spiral","c) Agile","d) Prototype"], ans:"c) Agile — Agile is iterative and adapts to changing requirements through short development cycles (sprints)."},
+        {q:"4. Database design and UI mockups are created in which phase?", opts:["a) Analysis","b) Implementation","c) Testing","d) Design"], ans:"d) Design — The Design phase covers HOW the system will work, including DB structure, interfaces, and architecture."},
+        {q:"5. Fixing a crash bug after the system is deployed is:", opts:["a) Testing","b) Corrective Maintenance","c) Analysis","d) Implementation"], ans:"b) Corrective Maintenance — Bug fixes after deployment are corrective maintenance. Testing happens BEFORE deployment."},
+        {q:"6. Which testing involves the client/user approving the system?", opts:["a) Unit Testing","b) Integration Testing","c) UAT","d) System Testing"], ans:"c) UAT (User Acceptance Testing) — End users test the system to confirm it meets their needs before final deployment."},
+        {q:"7. In the Waterfall model, phases are:", opts:["a) Iterative","b) Parallel","c) Sequential","d) Random"], ans:"c) Sequential — Waterfall moves through phases one at a time; you cannot go back to a previous phase."},
+        {q:"8. Adding a new feature to an existing system after deployment is:", opts:["a) Corrective","b) Perfective","c) Adaptive","d) Preventive"], ans:"b) Perfective Maintenance — Adding new functionality or improving performance after deployment."},
+        {q:"9. Which document is the output of the Planning phase?", opts:["a) SRS","b) Source Code","c) Feasibility Report","d) Test Cases"], ans:"c) Feasibility Report — Contains the decision on whether to proceed with the project based on feasibility analysis."},
+        {q:"10. The Prototype model is best when:", opts:["a) Requirements are clear","b) Requirements are unclear","c) Budget is fixed","d) Timeline is short"], ans:"b) Requirements unclear — Prototyping builds a working model so users can see and refine requirements before full development."}
+      ].map(q=>`<div class="mcq-item"><p class="q">${q.q}</p>${q.opts.map(o=>`<div class="mcq-opt">${o}</div>`).join('')}<button class="show-ans-btn" onclick="toggleAns(this)">Show Answer</button><div class="mcq-ans">${q.ans}</div></div>`).join('')}
+    </div>`,
+
+    `<div class="card">
+      <h2>Short Questions</h2>
+      ${[
+        {q:"Q1. What is the difference between the Analysis and Design phases?", a:"Analysis answers WHAT the system needs to do — gathering requirements, studying current system, producing SRS. Design answers HOW it will do it — database structure, interface layouts, system architecture. Analysis = requirements. Design = blueprint."},
+        {q:"Q2. Name 3 types of maintenance with examples.", a:"1. Corrective — fixing bugs after deployment (e.g., login button crashes → fix the bug). 2. Adaptive — updating system for new environment (e.g., upgrading for Windows 11). 3. Perfective — adding features users requested (e.g., adding a search function to an app)."},
+        {q:"Q3. What is a feasibility study?", a:"An assessment in the Planning phase to determine if a project is worth pursuing. Three types: Technical (can we build it?), Economic (can we afford it?), Operational (will users accept it?)."},
+        {q:"Q4. What is the difference between Waterfall and Agile?", a:"Waterfall: Sequential phases, no going back, best for fixed requirements, one big delivery at end. Agile: Iterative sprints, adaptive to change, continuous delivery, best for changing requirements."},
+        {q:"Q5. Why is the Testing phase important?", a:"Testing ensures the system works correctly and meets requirements before it is deployed. It identifies bugs, security flaws, and performance issues. Without testing, bugs reach end-users, damaging reliability and trust."}
+      ].map(sq=>`<div class="mcq-item"><p class="q">${sq.q}</p><button class="show-ans-btn" onclick="toggleAns(this)">Show Answer</button><div class="mcq-ans">${sq.a}</div></div>`).join('')}
+    </div>`,
+
+    `<div class="card">
+      <h2>Exam Strategy — SDLC</h2>
+      <div class="exam-tip"><div class="tip-icon">🗝</div><div class="tip-text"><strong>Phase identification trick:</strong> For scenarios, ask yourself: "Are they DECIDING to build?" → Planning. "Are they ASKING USERS what they want?" → Analysis. "Are they DRAWING blueprints?" → Design. "Are they CODING?" → Implementation. "Are they FINDING BUGS before launch?" → Testing. "Is it ALREADY deployed and being fixed/updated?" → Maintenance.</div></div>
+      <div class="exam-tip"><div class="tip-icon">📝</div><div class="tip-text"><strong>Model selection:</strong> Exams love "which model is best for this situation?" — Fixed requirements = Waterfall. Changing = Agile. High risk = Spiral. Unclear requirements = Prototype.</div></div>
+      <div class="exam-tip"><div class="tip-icon">⚠</div><div class="tip-text"><strong>Common trap:</strong> Testing ≠ Maintenance. Testing is BEFORE deployment. Maintenance is AFTER. If the system is "already live," it's always Maintenance.</div></div>
+      <div class="exam-tip"><div class="tip-icon">💡</div><div class="tip-text"><strong>Memory trick:</strong> PADITMK — Planning, Analysis, Design, Implementation, Testing, Maintenance. "Please Always Design Intelligent Tested Modules."</div></div>
+      <button class="ask-claude-btn" onclick="sendPrompt('Give me 3 complex SDLC scenario questions for exam practice with detailed answers')">More SDLC scenarios ↗</button>
+    </div>`
+  ]
+},
+
+{
+  title: "Logic Gates",
+  color: "teal",
+  sections: ["Notes", "Mind Map", "Gate Symbols", "Truth Tables", "ELI10", "Practice MCQs", "Short Qs", "Exam Strategy"],
+  content: [
+    `<div class="card">
+      <h2>Complete Notes — Logic Gates</h2>
+      <p>Logic gates are the fundamental building blocks of digital circuits. They perform logical operations on binary inputs (0 or 1) and produce a binary output. Based on Boolean algebra.</p>
+      <h3>The 7 Basic Logic Gates</h3>
+      <table class="tt">
+        <tr><th>Gate</th><th>Symbol</th><th>Operation</th><th>Rule (simple)</th></tr>
+        <tr><td>AND</td><td>D-shape with flat left</td><td>A · B</td><td>Output 1 only if ALL inputs are 1</td></tr>
+        <tr><td>OR</td><td>Curved D-shape</td><td>A + B</td><td>Output 1 if ANY input is 1</td></tr>
+        <tr><td>NOT</td><td>Triangle with circle</td><td>Ā (A-bar)</td><td>Inverts the input (flip 0↔1)</td></tr>
+        <tr><td>NAND</td><td>AND + circle at output</td><td>-(A·B)</td><td>Opposite of AND (universal gate)</td></tr>
+        <tr><td>NOR</td><td>OR + circle at output</td><td>-(A+B)</td><td>Opposite of OR (universal gate)</td></tr>
+        <tr><td>XOR</td><td>OR with extra curve</td><td>A⊕B</td><td>Output 1 if inputs are DIFFERENT</td></tr>
+        <tr><td>XNOR</td><td>XOR + circle</td><td>-(A⊕B)</td><td>Output 1 if inputs are SAME</td></tr>
+      </table>
+      <h3>Universal Gates</h3>
+      <p>NAND and NOR are called <strong>universal gates</strong> because any other gate can be built using only NAND gates (or only NOR gates). This is important for manufacturing — simpler, cheaper chips.</p>
+      <div class="warn-box"><p><strong>Common Mistakes:</strong> Confusing XOR and OR (XOR is 0 when both inputs = 1!) · Forgetting NAND = NOT AND (invert AND output) · Drawing wrong symbols in diagrams</p></div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Mind Map — Logic Gates</h2>
+      <div class="mindmap">
+<span class="root">LOGIC GATES</span>
+├── BASIC GATES (3)
+│   ├── AND → All inputs must be 1 → output 1
+│   ├── OR  → Any input is 1 → output 1
+│   └── NOT → Single input, flips it
+│
+├── DERIVED/COMPOUND GATES (4)
+│   ├── NAND = NOT + AND (inverted AND)
+│   ├── NOR  = NOT + OR  (inverted OR)
+│   ├── XOR  = DIFFERENT inputs → 1
+│   └── XNOR = SAME inputs → 1
+│
+├── UNIVERSAL GATES
+│   ├── NAND → can build ANY circuit
+│   └── NOR  → can build ANY circuit
+│
+├── BOOLEAN NOTATION
+│   ├── AND = A · B or AB
+│   ├── OR  = A + B
+│   ├── NOT = Ā or A'
+│   └── XOR = A ⊕ B
+│
+└── APPLICATIONS
+    ├── Arithmetic circuits (adders)
+    ├── Memory (flip-flops)
+    ├── Multiplexers/Demultiplexers
+    └── CPU logic units (ALU)</div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Logic Gate Symbols (ASCII Art)</h2>
+      <h3>AND Gate</h3>
+      <div class="mono">A ──┐
+    [AND]──── Output (A·B)
+B ──┘
+Rule: Output = 1 ONLY if A=1 AND B=1</div>
+      <h3>OR Gate</h3>
+      <div class="mono">A ──┐
+    [OR]──── Output (A+B)
+B ──┘
+Rule: Output = 1 if A=1 OR B=1 (or both)</div>
+      <h3>NOT Gate (Inverter)</h3>
+      <div class="mono">A ──[NOT]─○── Output (Ā)
+Rule: Flips input. 0→1, 1→0</div>
+      <h3>NAND Gate</h3>
+      <div class="mono">A ──┐
+    [AND]─○── Output (̄(A·B))
+B ──┘
+Rule: Opposite of AND. Output = 0 ONLY if both = 1</div>
+      <h3>NOR Gate</h3>
+      <div class="mono">A ──┐
+    [OR]──○── Output (̄(A+B))
+B ──┘
+Rule: Output = 1 ONLY if BOTH inputs = 0</div>
+      <h3>XOR Gate</h3>
+      <div class="mono">A ──┐
+    [XOR]──── Output (A⊕B)
+B ──┘
+Rule: Output = 1 ONLY if inputs are DIFFERENT</div>
+      <div class="tip-box"><p><strong>Circle = NOT:</strong> Any gate with a circle at its output means the output is inverted (NOT applied).</p></div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Truth Tables — All Gates</h2>
+      <h3>AND Gate</h3>
+      <table class="tt"><tr><th>A</th><th>B</th><th>A AND B</th></tr><tr><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td>1</td><td>0</td></tr><tr><td>1</td><td>0</td><td>0</td></tr><tr><td>1</td><td>1</td><td>1</td></tr></table>
+      <h3>OR Gate</h3>
+      <table class="tt"><tr><th>A</th><th>B</th><th>A OR B</th></tr><tr><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td>1</td><td>1</td></tr><tr><td>1</td><td>0</td><td>1</td></tr><tr><td>1</td><td>1</td><td>1</td></tr></table>
+      <h3>NOT Gate</h3>
+      <table class="tt"><tr><th>A</th><th>NOT A</th></tr><tr><td>0</td><td>1</td></tr><tr><td>1</td><td>0</td></tr></table>
+      <h3>NAND Gate</h3>
+      <table class="tt"><tr><th>A</th><th>B</th><th>NAND</th></tr><tr><td>0</td><td>0</td><td>1</td></tr><tr><td>0</td><td>1</td><td>1</td></tr><tr><td>1</td><td>0</td><td>1</td></tr><tr><td>1</td><td>1</td><td>0</td></tr></table>
+      <h3>NOR Gate</h3>
+      <table class="tt"><tr><th>A</th><th>B</th><th>NOR</th></tr><tr><td>0</td><td>0</td><td>1</td></tr><tr><td>0</td><td>1</td><td>0</td></tr><tr><td>1</td><td>0</td><td>0</td></tr><tr><td>1</td><td>1</td><td>0</td></tr></table>
+      <h3>XOR Gate</h3>
+      <table class="tt"><tr><th>A</th><th>B</th><th>XOR</th></tr><tr><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td>1</td><td>1</td></tr><tr><td>1</td><td>0</td><td>1</td></tr><tr><td>1</td><td>1</td><td>0</td></tr></table>
+      <div class="tip-box"><p><strong>Quick pattern:</strong> AND = "both 1 → 1". OR = "any 1 → 1". NAND = flip AND output. NOR = flip OR output. XOR = "same → 0, different → 1".</p></div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Explain Like I'm 10 — Logic Gates</h2>
+      <h3>AND Gate = Both switches must be ON</h3>
+      <p>Imagine a series of lights with TWO switches. The light turns on ONLY if Switch A is ON AND Switch B is ON. If either is off, the light stays off. That's an AND gate.</p>
+      <h3>OR Gate = At least one switch ON</h3>
+      <p>Now the light has a parallel circuit. It turns on if Switch A is ON, OR Switch B is ON, or BOTH are on. Only when BOTH are off does the light go off. That's OR.</p>
+      <h3>NOT Gate = Opposites</h3>
+      <p>When A is ON (1), output is OFF (0). When A is OFF (0), output is ON (1). It flips everything. Like an inverter — always does the opposite.</p>
+      <h3>NAND = AND + Flip</h3>
+      <p>Take the AND result and flip it. AND's only "1" becomes "0". All the AND "0s" become "1s". So NAND is mostly 1 except when both inputs are 1.</p>
+      <h3>XOR = Only different inputs give 1</h3>
+      <p>Think of XOR as "exclusive or" — "one OR the other, but NOT both." It's like asking: "Are you wearing a hat OR not wearing a hat?" You can't be doing both at the same time!</p>
+    </div>`,
+
+    `<div class="card">
+      <h2>Practice MCQs — Logic Gates</h2>
+      ${[
+        {q:"1. AND gate output is 1 when:", opts:["a) Any input is 1","b) All inputs are 1","c) Inputs are different","d) Input is 0"], ans:"b) All inputs are 1 — AND requires ALL inputs to be 1 for the output to be 1."},
+        {q:"2. Which gate is called a universal gate?", opts:["a) AND","b) OR","c) NOT","d) NAND"], ans:"d) NAND — Both NAND and NOR are universal gates. NAND can implement any other gate."},
+        {q:"3. XOR output is 1 when:", opts:["a) Both inputs are 1","b) Both inputs are 0","c) Inputs are different","d) Any input is 1"], ans:"c) Inputs are different — XOR (Exclusive OR) gives 1 only when A≠B."},
+        {q:"4. NOT gate has how many inputs?", opts:["a) 0","b) 1","c) 2","d) 3"], ans:"b) 1 — NOT gate is a single-input gate that inverts its input."},
+        {q:"5. NOR gate output is 1 when:", opts:["a) Both inputs are 1","b) Any input is 1","c) Both inputs are 0","d) Inputs differ"], ans:"c) Both inputs are 0 — NOR is the inverse of OR. Only when all inputs are 0 does output = 1."},
+        {q:"6. NAND gate is combination of:", opts:["a) NOT + OR","b) NOT + AND","c) AND + OR","d) XOR + NOT"], ans:"b) NOT + AND — NAND = NOT(AND). The AND result is then inverted."},
+        {q:"7. A gate with a small circle at its output means:", opts:["a) AND operation","b) OR operation","c) NOT (inversion)","d) XOR operation"], ans:"c) NOT (inversion) — A bubble/circle at the output indicates the output is inverted (NOT applied)."},
+        {q:"8. For OR gate: A=0, B=0, Output=?", opts:["a) 1","b) 0","c) Undefined","d) Both 0 and 1"], ans:"b) 0 — OR outputs 0 only when ALL inputs are 0. This is the only case."},
+        {q:"9. XNOR outputs 1 when:", opts:["a) Inputs differ","b) Any input is 1","c) Inputs are the same","d) Both are 0 only"], ans:"c) Inputs are the same — XNOR is the inverse of XOR. Same inputs → 1."},
+        {q:"10. Why are NAND/NOR called universal gates?", opts:["a) They are fastest","b) Any gate can be made from them","c) They use least power","d) They have most inputs"], ans:"b) Any gate can be made from them — Using only NAND (or NOR) gates, you can build AND, OR, NOT, and any other gate."}
+      ].map(q=>`<div class="mcq-item"><p class="q">${q.q}</p>${q.opts.map(o=>`<div class="mcq-opt">${o}</div>`).join('')}<button class="show-ans-btn" onclick="toggleAns(this)">Show Answer</button><div class="mcq-ans">${q.ans}</div></div>`).join('')}
+    </div>`,
+
+    `<div class="card">
+      <h2>Short Questions</h2>
+      ${[
+        {q:"Q1. What is a logic gate?", a:"A logic gate is a fundamental building block of digital circuits that performs a logical operation on one or more binary inputs (0 or 1) to produce a single binary output. They implement Boolean algebra operations in hardware."},
+        {q:"Q2. Differentiate between AND and NAND gates.", a:"AND gate: Output is 1 ONLY when ALL inputs are 1. NAND gate: Output is 0 ONLY when ALL inputs are 1 (otherwise 1). NAND = NOT(AND). A circle at the output of AND creates NAND."},
+        {q:"Q3. Why is NAND called a universal gate?", a:"NAND is universal because you can build ANY other logic gate using only NAND gates. NOT(A) = NAND(A,A). AND(A,B) = NAND(NAND(A,B), NAND(A,B)). OR and XOR can also be constructed. This reduces manufacturing complexity."},
+        {q:"Q4. Construct the truth table for XOR with 2 inputs.", a:"A=0,B=0 → 0 | A=0,B=1 → 1 | A=1,B=0 → 1 | A=1,B=1 → 0. Pattern: XOR gives 1 when inputs DIFFER, 0 when inputs are the SAME."},
+        {q:"Q5. What is the difference between OR and NOR?", a:"OR: Output is 1 if any input is 1; 0 only when all are 0. NOR: Exact opposite — output is 0 if any input is 1; 1 only when ALL inputs are 0. NOR = NOT(OR)."}
+      ].map(sq=>`<div class="mcq-item"><p class="q">${sq.q}</p><button class="show-ans-btn" onclick="toggleAns(this)">Show Answer</button><div class="mcq-ans">${sq.a}</div></div>`).join('')}
+    </div>`,
+
+    `<div class="card">
+      <h2>Exam Strategy — Logic Gates</h2>
+      <div class="exam-tip"><div class="tip-icon">🔵</div><div class="tip-text"><strong>Circle = inversion:</strong> Whenever you see a small circle on a gate's output, the gate's result is inverted (NOT applied). NAND = AND + circle. NOR = OR + circle. XNOR = XOR + circle.</div></div>
+      <div class="exam-tip"><div class="tip-icon">📊</div><div class="tip-text"><strong>Truth table rows:</strong> For N inputs, you need 2ᴺ rows. 2 inputs = 4 rows. 3 inputs = 8 rows. Always start with all zeros and count up in binary.</div></div>
+      <div class="exam-tip"><div class="tip-icon">⚠</div><div class="tip-text"><strong>XOR trap:</strong> Students confuse XOR with OR. When both inputs are 1: OR gives 1, XOR gives 0. This is the key difference.</div></div>
+      <div class="exam-tip"><div class="tip-icon">💡</div><div class="tip-text"><strong>Fastest truth table method:</strong> Fill columns for each input first (alternating patterns of 0s and 1s), then evaluate the gate rule for each row.</div></div>
+      <button class="ask-claude-btn" onclick="sendPrompt('Give me practice questions combining multiple logic gates into circuits with truth tables')">Practice circuit questions ↗</button>
+    </div>`
+  ]
+},
+
+{
+  title: "Boolean & Circuits",
+  color: "purple",
+  sections: ["Notes", "Laws & Rules", "Circuit Design", "Truth Tables", "ELI10", "Step-by-Step", "Practice MCQs", "Exam Strategy"],
+  content: [
+    `<div class="card">
+      <h2>Complete Notes — Boolean Expressions & Circuit Design</h2>
+      <p><strong>Boolean Algebra</strong> is a mathematical system for manipulating binary variables. George Boole invented it. It forms the mathematical foundation of all digital circuits.</p>
+      <h3>Boolean Variables & Operators</h3>
+      <ul>
+        <li>Variables: A, B, C... take values 0 or 1 only</li>
+        <li>AND: A·B or AB — multiplication</li>
+        <li>OR: A+B — addition</li>
+        <li>NOT: Ā or A' — complement/inverse</li>
+      </ul>
+      <h3>Boolean Laws (Must Memorize)</h3>
+      <table class="tt">
+        <tr><th>Law</th><th>AND form</th><th>OR form</th></tr>
+        <tr><td>Identity</td><td>A·1 = A</td><td>A+0 = A</td></tr>
+        <tr><td>Null/Domination</td><td>A·0 = 0</td><td>A+1 = 1</td></tr>
+        <tr><td>Idempotent</td><td>A·A = A</td><td>A+A = A</td></tr>
+        <tr><td>Complement</td><td>A·Ā = 0</td><td>A+Ā = 1</td></tr>
+        <tr><td>Double Negation</td><td colspan="2">̄Ā = A</td></tr>
+        <tr><td>Commutative</td><td>A·B = B·A</td><td>A+B = B+A</td></tr>
+        <tr><td>Associative</td><td>(A·B)·C = A·(B·C)</td><td>(A+B)+C = A+(B+C)</td></tr>
+        <tr><td>Distributive</td><td>A·(B+C) = A·B + A·C</td><td>A+(B·C) = (A+B)·(A+C)</td></tr>
+        <tr><td>De Morgan's 1st</td><td colspan="2">̄(A·B) = Ā+B̄</td></tr>
+        <tr><td>De Morgan's 2nd</td><td colspan="2">̄(A+B) = Ā·B̄</td></tr>
+      </table>
+      <div class="warn-box"><p><strong>De Morgan's Laws — Most Tested!</strong> To apply De Morgan's: Change AND↔OR, then complement each variable. ̄(A·B) → swap · to + and bar each → Ā+B̄</p></div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Boolean Laws Quick Reference</h2>
+      <h3>Simplification Strategies</h3>
+      <div class="step"><div class="step-num">1</div><div class="step-content">Apply <strong>Complement Law:</strong> Look for A·Ā (= 0) or A+Ā (= 1) — these simplify immediately</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">Apply <strong>Null Law:</strong> Anything AND 0 = 0. Anything OR 1 = 1</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">Apply <strong>Identity Law:</strong> A AND 1 = A. A OR 0 = A — removes constants</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content">Apply <strong>Distributive Law:</strong> Factor out common variables like in algebra</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content">Apply <strong>De Morgan's:</strong> Use to simplify NOR/NAND expressions</div></div>
+      <h3>De Morgan's Theorem — Exam Essential</h3>
+      <div class="mono">Theorem 1: ̄(A·B) = Ā + B̄
+"NOT of AND = OR of NOTs"
+
+Theorem 2: ̄(A+B) = Ā · B̄  
+"NOT of OR = AND of NOTs"
+
+Memory trick: "Break the line, change the sign"
+  ̄(A·B) → break bar → Ā + B̄ (· becomes +)
+  ̄(A+B) → break bar → Ā · B̄ (+ becomes ·)</div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Boolean Expression → Circuit Design</h2>
+      <h3>Method: Identify gates from the expression</h3>
+      <p>Each operator in the expression corresponds to a gate. Build the circuit by connecting gates according to the expression's structure.</p>
+      <h3>Example 1: F = A·B + C</h3>
+      <div class="mono">Step 1: Identify operations
+  → A·B = AND gate (inputs: A, B)
+  → result OR C = OR gate
+
+Step 2: Draw circuit:
+A ──┐
+    [AND]──┐
+B ──┘      [OR]──── F = A·B + C
+C ──────────┘</div>
+      <h3>Example 2: F = Ā·B + A·B̄</h3>
+      <div class="mono">Step 1: Identify operations
+  → Ā = NOT gate on A
+  → B̄ = NOT gate on B
+  → Ā·B = AND gate (inputs: Ā, B)
+  → A·B̄ = AND gate (inputs: A, B̄)
+  → Final: OR gate combining both AND outputs
+
+Step 2: Draw circuit:
+A ──[NOT]──┐
+            [AND1]──┐
+B ──────────┘       [OR]──── F
+A ──────────┐       |
+            [AND2]──┘
+B ──[NOT]──┘
+
+(Note: This circuit implements XOR!)</div>
+      <h3>Example 3: F = (A+B)·C</h3>
+      <div class="mono">A ──┐
+    [OR]──┐
+B ──┘     [AND]──── F = (A+B)·C
+C ─────────┘
+Note: OR gate must come FIRST (inside brackets)</div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Circuit → Truth Table (Step by Step)</h2>
+      <h3>Expression: F = A·B + C (2 inputs A,B,C)</h3>
+      <p>3 inputs = 2³ = 8 rows needed. Evaluate step by step:</p>
+      <table class="tt">
+        <tr><th>A</th><th>B</th><th>C</th><th>A·B</th><th>F = A·B+C</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+        <tr><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+        <tr><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+        <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+        <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+      </table>
+      <div class="tip-box"><p><strong>Method:</strong> Add a column for each intermediate operation (A·B in this case). Fill the final column using intermediate results. This avoids errors on complex expressions.</p></div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Explain Like I'm 10 — Boolean Algebra</h2>
+      <h3>What is Boolean Algebra?</h3>
+      <p>Boolean algebra is just like regular math — but instead of numbers like 1, 2, 3... we only have TWO values: 0 (false) and 1 (true). And instead of + meaning "add", it means "OR". And instead of × meaning "multiply", it means "AND".</p>
+      <h3>De Morgan's Theorem — The Flip Rule</h3>
+      <p>Imagine you say "I will NOT (go to the park AND buy ice cream)." De Morgan's says this is the SAME as "I will NOT go to the park OR I will NOT buy ice cream." The NOT distributes, and AND becomes OR!</p>
+      <h3>Why simplify Boolean expressions?</h3>
+      <p>A simpler expression = fewer gates = cheaper chip = less power = faster computer. Engineers simplify all the time — it's like reducing a fraction before calculating.</p>
+    </div>`,
+
+    `<div class="card">
+      <h2>Step-by-Step: Simplification + Circuit</h2>
+      <h3>Simplify: F = A·B + A·B̄</h3>
+      <div class="mono">Step 1: Factor out A (Distributive Law)
+  F = A·(B + B̄)
+
+Step 2: Apply Complement Law: B + B̄ = 1
+  F = A·(1)
+
+Step 3: Apply Identity Law: A·1 = A
+  F = A
+
+Circuit BEFORE simplification: (complex — 2 NOT, 2 AND, 1 OR gates)
+Circuit AFTER simplification: Just wire A directly! No gates needed!</div>
+      <h3>Apply De Morgan's to: ̄(A·B)</h3>
+      <div class="mono">Original: ̄(A·B)
+Step 1: "Break the bar" over each variable
+        → Ā and B̄
+Step 2: "Change the sign" (· becomes +)
+        → Ā + B̄
+Result: ̄(A·B) = Ā + B̄
+Verify: Check with A=1,B=1: ̄(1·1)=̄(1)=0 | Ā+B̄=0+0=0 ✓</div>
+      <h3>3-Input Expression: F = A·B·C + Ā</h3>
+      <div class="mono">Circuit:
+A──┐
+   [AND]──┐
+B──┘      [AND]──┐
+C──────────┘     [OR]──F
+A──[NOT]─────────┘
+
+Truth table: 8 rows (2³)
+When Ā=1 (A=0): F=1 regardless of B,C
+When A=1: F = B·C</div>
+    </div>`,
+
+    `<div class="card">
+      <h2>Practice MCQs — Boolean & Circuits</h2>
+      ${[
+        {q:"1. De Morgan's first theorem states:", opts:["a) ̄(A+B) = Ā·B̄","b) ̄(A·B) = Ā+B̄","c) A+Ā = 1","d) A·Ā = 0"], ans:"b) ̄(A·B) = Ā+B̄ — NOT(AND) equals OR of NOTs. 'Break the bar, change the sign.'"},
+        {q:"2. Simplify: A + 0 = ?", opts:["a) 0","b) 1","c) A","d) Ā"], ans:"c) A — Identity Law for OR: A+0 = A. Zero doesn't change the value."},
+        {q:"3. Simplify: A · Ā = ?", opts:["a) 1","b) A","c) 0","d) Ā"], ans:"c) 0 — Complement Law: A AND NOT-A is always 0. A variable and its complement cannot both be 1."},
+        {q:"4. F = A·B + A·C can be simplified to:", opts:["a) A+B·C","b) A·(B+C)","c) AB+C","d) A+BC"], ans:"b) A·(B+C) — Distributive Law: factor out A from both terms."},
+        {q:"5. Double negation: ̄Ā equals:", opts:["a) 0","b) 1","c) A","d) Ā"], ans:"c) A — Double NOT cancels out. Complement of complement = original."},
+        {q:"6. How many rows in a truth table with 3 inputs?", opts:["a) 3","b) 6","c) 8","d) 16"], ans:"c) 8 — 2³ = 8 rows for 3 binary input variables."},
+        {q:"7. F = A + 1 simplifies to:", opts:["a) A","b) 1","c) 0","d) Ā"], ans:"b) 1 — Null Law for OR: A+1 = 1 always, regardless of A."},
+        {q:"8. The expression A·B + Ā·B equals:", opts:["a) A","b) B","c) A+B","d) 0"], ans:"b) B — Factor: B·(A+Ā) = B·1 = B. A key simplification pattern!"},
+        {q:"9. De Morgan's: ̄(A+B) equals:", opts:["a) Ā+B̄","b) Ā·B̄","c) A·B","d) A+B̄"], ans:"b) Ā·B̄ — De Morgan's 2nd theorem: NOT(OR) = AND of NOTs."},
+        {q:"10. To build F = Ā+B, which gates are needed?", opts:["a) NOT only","b) OR only","c) NOT + OR","d) AND + NOT"], ans:"c) NOT + OR — First: NOT gate on A (to get Ā). Then: OR gate with inputs Ā and B."}
+      ].map(q=>`<div class="mcq-item"><p class="q">${q.q}</p>${q.opts.map(o=>`<div class="mcq-opt">${o}</div>`).join('')}<button class="show-ans-btn" onclick="toggleAns(this)">Show Answer</button><div class="mcq-ans">${q.ans}</div></div>`).join('')}
+    </div>`,
+
+    `<div class="card">
+      <h2>Exam Strategy — Boolean & Circuits</h2>
+      <div class="exam-tip"><div class="tip-icon">🔑</div><div class="tip-text"><strong>De Morgan's is the #1 tested law.</strong> Practice applying it in both directions. "Break the bar, change the sign" is your mantra.</div></div>
+      <div class="exam-tip"><div class="tip-icon">📊</div><div class="tip-text"><strong>Truth table method:</strong> Add intermediate columns for complex expressions. Don't try to evaluate the whole expression at once — break it into parts.</div></div>
+      <div class="exam-tip"><div class="tip-icon">✏</div><div class="tip-text"><strong>Circuit drawing:</strong> Read expression from inside → outside (innermost brackets first). Draw those gates first, then connect to outer gates.</div></div>
+      <div class="exam-tip"><div class="tip-icon">⚠</div><div class="tip-text"><strong>Common trap:</strong> Forgetting to complement ALL variables when applying De Morgan's. ̄(A·B·C) = Ā+B̄+C̄ — ALL three get complemented.</div></div>
+      <div class="exam-tip"><div class="tip-icon">✅</div><div class="tip-text"><strong>Verify simplification:</strong> After simplifying, substitute A=1,B=0 (or any values) into BOTH original and simplified expressions. If outputs match, your simplification is correct.</div></div>
+      <button class="ask-claude-btn" onclick="sendPrompt('Give me 5 Boolean algebra simplification problems with step-by-step solutions for my AICT exam')">Get Boolean practice problems ↗</button>
+    </div>`
+  ]
+}
+
+];
+
+function switchTopic(idx) {
+  currentTopic = idx;
+  currentSection = 0;
+  visited.add(idx);
+  updateProgress();
+  renderSectionNav();
+  renderContent();
+  document.querySelectorAll('.nav-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
+}
+
+function switchSection(idx) {
+  currentSection = idx;
+  renderContent();
+  document.querySelectorAll('.sec-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
+}
+
+function renderSectionNav() {
+  const t = topics[currentTopic];
+  document.getElementById('sectionNav').innerHTML = t.sections.map((s,i)=>
+    `<button class="sec-btn${i===0?' active':''}" onclick="switchSection(${i})">${s}</button>`
+  ).join('');
+}
+
+function renderContent() {
+  const t = topics[currentTopic];
+  document.getElementById('mainContent').innerHTML = t.content[currentSection] || '<p>Coming soon</p>';
+}
+
+function updateProgress() {
+  for(let i=0;i<6;i++) {
+    document.getElementById('pb'+i).classList.toggle('done', visited.has(i));
+  }
+  document.getElementById('pbLabel').textContent = visited.size+'/6 studied';
+}
+
+function toggleAns(btn) {
+  const ans = btn.nextElementSibling;
+  const showing = ans.style.display === 'block';
+  ans.style.display = showing ? 'none' : 'block';
+  btn.textContent = showing ? 'Show Answer' : 'Hide Answer';
+}
+
+function toggleScenario(btn) {
+  const ans = btn.nextElementSibling;
+  const showing = ans.style.display === 'block';
+  ans.style.display = showing ? 'none' : 'block';
+  btn.textContent = showing ? 'Show Answer' : 'Hide Answer';
+}
+
+visited.add(0);
+updateProgress();
+renderSectionNav();
+renderContent();
+</script>
